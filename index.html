@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NarzX</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:'Share Tech Mono',monospace;
+  background:#050510;
+  color:#00f7ff;
+  overflow-x:hidden;
+}
+
+/* PARTICLE CANVAS */
+#particles{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:-1;
+}
+
+/* CONTAINER */
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:40px 20px;
+  text-align:center;
+}
+
+/* PROFILE */
+.profile-img{
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  border:3px solid #00f7ff;
+  object-fit:cover;
+  box-shadow:0 0 25px #00f7ff;
+  transition:.4s;
+}
+.profile-img:hover{
+  transform:scale(1.1) rotate(3deg);
+  box-shadow:0 0 50px #ff00ff;
+}
+
+/* GLITCH NAME */
+.glitch{
+  font-family:'Orbitron',sans-serif;
+  font-size:42px;
+  margin:20px 0 10px;
+  position:relative;
+  text-transform:uppercase;
+}
+.glitch::before,
+.glitch::after{
+  content:attr(data-text);
+  position:absolute;
+  left:0;
+  width:100%;
+}
+.glitch::before{
+  color:#ff00ff;
+  animation:glitchTop 1s infinite linear alternate-reverse;
+}
+.glitch::after{
+  color:#00f7ff;
+  animation:glitchBottom 1s infinite linear alternate-reverse;
+}
+@keyframes glitchTop{
+  0%{transform:translate(0)}
+  20%{transform:translate(-2px,-2px)}
+  40%{transform:translate(2px,2px)}
+  60%{transform:translate(-2px,2px)}
+  80%{transform:translate(2px,-2px)}
+  100%{transform:translate(0)}
+}
+@keyframes glitchBottom{
+  0%{transform:translate(0)}
+  20%{transform:translate(2px,2px)}
+  40%{transform:translate(-2px,-2px)}
+  60%{transform:translate(2px,-2px)}
+  80%{transform:translate(-2px,2px)}
+  100%{transform:translate(0)}
+}
+
+.tagline{
+  color:#ff00ff;
+  height:25px;
+  margin-bottom:30px;
+}
+
+/* CARD */
+.card{
+  background:rgba(0,0,30,.7);
+  border:1px solid #00f7ff;
+  border-radius:15px;
+  padding:25px;
+  margin:20px 0;
+  box-shadow:0 0 20px rgba(0,255,255,.2);
+  transition:.3s;
+}
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 0 30px #ff00ff;
+}
+
+h2{
+  margin-bottom:15px;
+}
+
+/* SKILLS */
+.skill{
+  margin:15px 0;
+  text-align:left;
+}
+.skill-name{
+  margin-bottom:5px;
+}
+.skill-bar{
+  height:8px;
+  background:#111;
+  border-radius:10px;
+  overflow:hidden;
+}
+.skill-progress{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#00f7ff,#ff00ff);
+  transition:1.5s;
+}
+
+/* COUNTER */
+.stats{
+  display:flex;
+  justify-content:space-around;
+  flex-wrap:wrap;
+}
+.stat{
+  margin:10px;
+}
+.stat h3{
+  font-size:28px;
+  color:#ff00ff;
+}
+
+footer{
+  margin-top:40px;
+  opacity:.6;
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="container">
+
+<img src="profile.jpg" class="profile-img">
+
+<h1 class="glitch" data-text="NarzX">NarzX</h1>
+<p class="tagline" id="typing"></p>
+
+<div class="card">
+<h2>About Me</h2>
+<p>Suka bikim project mini, suka cybersecurity, Pro Pler HTML.</p>
+</div>
+
+<div class="card">
+<h2>Skills</h2>
+
+<div class="skill">
+<div class="skill-name">HTML</div>
+<div class="skill-bar"><div class="skill-progress" data-progress="90"></div></div>
+</div>
+
+<div class="skill">
+<div class="skill-name">JavaScript</div>
+<div class="skill-bar"><div class="skill-progress" data-progress="75"></div></div>
+</div>
+
+<div class="skill">
+<div class="skill-name">Python</div>
+<div class="skill-bar"><div class="skill-progress" data-progress="85"></div></div>
+</div>
+
+</div>
+
+<div class="card">
+<h2>Stats</h2>
+<div class="stats">
+<div class="stat"><h3 id="count1">0</h3><p>Projects</p></div>
+<div class="stat"><h3 id="count2">0</h3><p>Learning Hours</p></div>
+<div class="stat"><h3 id="count3">0</h3><p>Ideas Built</p></div>
+</div>
+</div>
+
+<footer>© 2026 NarzX | Mode pro pler</footer>
+
+</div>
+
+<script>
+/* TYPING EFFECT */
+const text = "Pro Pler epep • Citer epep • Panel";
+let i=0;
+function typing(){
+  if(i<text.length){
+    document.getElementById("typing").innerHTML+=text.charAt(i);
+    i++;
+    setTimeout(typing,60);
+  }
+}
+typing();
+
+/* SKILL ANIMATION */
+window.addEventListener("load",()=>{
+  document.querySelectorAll(".skill-progress").forEach(bar=>{
+    bar.style.width=bar.dataset.progress+"%";
+  });
+});
+
+/* COUNTER */
+function animateValue(id,end){
+  let obj=document.getElementById(id);
+  let start=0;
+  let duration=2000;
+  let stepTime=Math.abs(Math.floor(duration/end));
+  let timer=setInterval(()=>{
+    start++;
+    obj.textContent=start;
+    if(start>=end){clearInterval(timer);}
+  },stepTime);
+}
+animateValue("count1",10);
+animateValue("count2",1);
+animateValue("count3",18);
+
+/* PARTICLES */
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particlesArray=[];
+class Particle{
+  constructor(){
+    this.x=Math.random()*canvas.width;
+    this.y=Math.random()*canvas.height;
+    this.size=Math.random()*2;
+    this.speedX=Math.random()-0.5;
+    this.speedY=Math.random()-0.5;
+  }
+  update(){
+    this.x+=this.speedX;
+    this.y+=this.speedY;
+  }
+  draw(){
+    ctx.fillStyle="#00f7ff";
+    ctx.fillRect(this.x,this.y,this.size,this.size);
+  }
+}
+function init(){
+  for(let i=0;i<120;i++){
+    particlesArray.push(new Particle());
+  }
+}
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particlesArray.forEach(p=>{
+    p.update();
+    p.draw();
+  });
+  requestAnimationFrame(animate);
+}
+init();
+animate();
+</script>
+
+</body>
+  </html>
+  
